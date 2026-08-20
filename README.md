@@ -14,6 +14,18 @@ sysl-lang/sdl3    windows, rendering, events and input
 sysl-lang/box2d   rigid-body physics — Box2D v3, vendored
 ```
 
+## Try it without building it
+
+**[Download the APK](https://github.com/sysl-lang/android-bouncing/releases/latest/download/android-bouncing.apk)** and open it on an Android phone.
+
+- **Android 8.0 or newer** (`minSdk 26`), and **arm64** — which is every phone since about 2015. It
+  will *not* install on an x86_64 emulator, because sysl has one Android target and that is
+  `aarch64-android`.
+- Your phone will ask whether to allow installing from wherever you downloaded it. That prompt is
+  what sideloading is; it is not a warning about this app in particular.
+- It is signed with the project's own key rather than by a store, so it is not checked by anyone but
+  you. The source is right here.
+
 ## Neither package knew it was on a phone
 
 The demo is Box2D physics drawn by SDL3: a boxful of discs, squares and triangles with **no gravity**,
