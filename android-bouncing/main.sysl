@@ -17,10 +17,8 @@
 
 import sh.sysl.box2d.*
 import sh.sysl.box2d.math.{Vec2, Transform, AABB, zero, rot}
-import sh.sysl.box2d.c
 import sh.sysl.sdl3.*
 import sh.sysl.sdl3.{INIT_VIDEO, SCANCODE_ESCAPE, WINDOW_RESIZABLE}
-import sh.sysl.sdl3.c.Vertex
 import sysl.buf.{Buf, buf}
 import sysl.rand.rng
 import sysl.math.Float
@@ -88,6 +86,26 @@ palette(i: int) -> Color =
 // only the combined rectangle — so the Java half reads the insets and hands them over here. `bars`
 // holds them; that file says why they are not in this one.
 //
+// ## The bars, as the Java half last reported them
+//
+// **These sit here rather than in a module of their own, and until 2026-08-20 they could not.** An
+// `@export`ed function in a header-less file that reached module storage made *every* `@export` in
+// that file vanish — the file was chosen as the program's beginning, so its functions became nested
+// functions of a body `build-c` never emits, which renames them into an environment and drops the
+// attribute with the name. Card `0167`, fixed in the compiler; this file is what it buys back.
+//
+// **They are declared above the function that writes them**, because module storage is in scope from
+// where it is bound onward and a function reaching one declared below it is refused.
+//
+// **They are written on the UI thread and read on SDL's**, and that is deliberate rather than
+// overlooked: four independent `i32` stores are the one shape where a lock buys nothing worth having.
+// The worst a reader can see is one frame laid out against a mix of old and new values, on the frame
+// the phone was turned.
+var bar_left: i32 = 0
+var bar_top: i32 = 0
+var bar_right: i32 = 0
+var bar_bottom: i32 = 0
+
 // **A JNI entry point, defined in sysl.** JNI resolves an `external fun` by mangling its package and
 // class into `Java_<package>_<Class>_<method>`, so this string is what `MainActivity`'s
 // `nativeSetSystemBars` binds to. A rename on either side still links — JNI resolves at run time —
@@ -99,24 +117,6 @@ set_system_bars(env: *u8, instance: *u8, l: i32, t: i32, r: i32, b: i32)
     bar_right = r
     bar_bottom = b
 end set_system_bars
-
-// ## The bars, as the Java half last reported them
-//
-// **These sit here rather than in a module of their own, and until 2026-08-20 they could not.** An
-// `@export`ed function in a header-less file that reached module storage made *every* `@export` in
-// that file vanish — the file was chosen as the program's beginning, so its functions became nested
-// functions of a body `build-c` never emits, which renames them into an environment and drops the
-// attribute with the name. Card `0167`, fixed in the compiler; this file is what it buys back.
-//
-// **They are written on the UI thread and read on SDL's**, and that is deliberate rather than
-// overlooked: four independent `i32` stores are the one shape where a lock buys nothing worth having.
-// The worst a reader can see is one frame laid out against a mix of old and new values, on the frame
-// the phone was turned.
-var bar_left: i32 = 0
-var bar_top: i32 = 0
-var bar_right: i32 = 0
-var bar_bottom: i32 = 0
-
 
 // ## Pixels and metres
 //
@@ -290,7 +290,7 @@ end rescale
 // A polygon is drawn as a **triangle fan** from its first vertex, which is exact for any convex
 // polygon — and Box2D's are convex by construction, since `make_polygon` runs its points through a
 // hull. `draw_geometry` is the one call that puts arbitrary triangles on an SDL renderer.
-draw_polygon(ren: &Renderer, v: View, xf: Transform, p: c.Polygon, col: Color)
+draw_polygon(ren: &Renderer, v: View, xf: Transform, p: Polygon, col: Color)
     var verts: Buf[Vertex] = buf()
     var idx: Buf[i32] = buf()
     val count = usize(p.count)
