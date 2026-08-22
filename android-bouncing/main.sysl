@@ -92,8 +92,12 @@ palette(i: int) -> Color =
 // functions of a body `build-c` never emits, which renames them into an environment and drops the
 // attribute with the name. Card `0167`, fixed in the compiler; this file is what it buys back.
 //
-// **They are declared above the function that writes them**, because module storage is in scope from
-// where it is bound onward and a function reaching one declared below it is refused.
+// **They are declared above the function that writes them, and the order is a courtesy rather than a
+// requirement.** This file is compiled by `sysl build-c`, which emits no `main`, so the file is not
+// a program's entry file and these are module storage: hoisted, laid into the object file, and in
+// scope throughout it whatever order they are written in. A plain `sysl build` would read the file
+// as a *body* instead and make them that body's locals, at which point the order does matter -- but
+// that is not how anything here is built, and nothing below relies on it.
 //
 // **They are written on the UI thread and read on SDL's**, and that is deliberate rather than
 // overlooked: four independent `i32` stores are the one shape where a lock buys nothing worth having.
