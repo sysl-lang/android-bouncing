@@ -19,7 +19,8 @@ import sh.sysl.box2d.*
 import sh.sysl.box2d.math.{Vec2, Transform, AABB, zero, rot}
 import sh.sysl.box2d.c
 import sh.sysl.sdl3.*
-import sh.sysl.sdl3.c.{INIT_VIDEO, SCANCODE_ESCAPE, WINDOW_RESIZABLE, Vertex}
+import sh.sysl.sdl3.{INIT_VIDEO, SCANCODE_ESCAPE, WINDOW_RESIZABLE}
+import sh.sysl.sdl3.c.Vertex
 import sysl.buf.{Buf, buf}
 import sysl.rand.rng
 import sysl.math.Float
