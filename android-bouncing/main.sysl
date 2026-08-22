@@ -86,9 +86,7 @@ palette(i: int) -> Color =
 // only the combined rectangle — so the Java half reads the insets and hands them over here. `bars`
 // holds them; that file says why they are not in this one.
 //
-// ## The bars, as the Java half last reported them
-//
-// **These sit here rather than in a module of their own, and until 2026-08-20 they could not.** An
+// **They sit here rather than in a module of their own, and until 2026-08-20 they could not.** An
 // `@export`ed function in a header-less file that reached module storage made *every* `@export` in
 // that file vanish — the file was chosen as the program's beginning, so its functions became nested
 // functions of a body `build-c` never emits, which renames them into an environment and drops the
