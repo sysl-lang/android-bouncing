@@ -13,6 +13,10 @@
 package {
   name    = "android-bouncing"
   version = "0.1.0"
+
+  // Imports became transitive in 0.0.73, which is what lets the block below name Skitter and reach
+  // SDL3 through it.
+  sysl = "0.0.73"
 }
 
 // **One dependency, and the same one a desktop program would name.** `15 §8` says a link directive
@@ -25,9 +29,12 @@ package {
 // a prebuilt `.so` in a package is the other half of it: SDL's AAR is 16 MB of binaries built
 // against an NDK and an API level somebody else chose, and a package hashing that into `sysl.sum`
 // would be shipping a build nobody in this org could reproduce.
+// **Skitter is what makes an Android application's Java half somebody else's problem**: the system
+// bars, the orientation pair and the activity itself. It brings SDL3 with it, because imports are
+// transitive as of sysl 0.0.73 — so this program names it rather than SDL3 directly.
 dependencies {
-  sdl3  { git = "github.com/sysl-lang/sdl3",  version = "0.3.1" }
-  box2d { git = "github.com/sysl-lang/box2d", version = "0.1.1" }
+  skitter { git = "github.com/sysl-lang/skitter", version = "0.1.0" }
+  box2d   { git = "github.com/sysl-lang/box2d",   version = "0.1.1" }
 }
 
 // `heap` and `posix` are what `sh.sysl.sdl3` itself requires, and a program reaching a gated module

@@ -4,15 +4,26 @@
 with no gravity, perfect restitution and a little friction, so nothing ever settles and everything
 tumbles. Tap to throw in another.
 
-It is the demo for [androidkit](https://github.com/sysl-lang/androidkit), which is the template you
-copy to start an Android project. Everything about *how* a sysl program becomes an APK is documented
-there — the `SDL_main` export, the CMake inversion, the JNI bridge for the system-bar insets, the
-orientation and theme traps. This README covers only what is particular to the demo.
+**To start an Android project, clone
+[`sysl-lang/skitter-app`](https://github.com/sysl-lang/skitter-app)** — two lines in
+`gradle.properties` and a `program/main.sysl`. This repository is a demo, and everything about *how*
+a sysl program becomes an APK is documented in `skitter-app`: the `SDL_main` export, the CMake
+inversion, the system-bar bridge, the orientation and theme traps. This README covers only what is
+particular to the physics.
 
 ```
-sysl-lang/sdl3    windows, rendering, events and input
-sysl-lang/box2d   rigid-body physics — Box2D v3, vendored
+sysl-lang/skitter   the system bars, the orientation pair, and the Java-side activity
+sysl-lang/box2d     rigid-body physics — Box2D v3, vendored
 ```
+
+**Two coordinates and neither of them is SDL3**, because imports are transitive: Skitter reaches it.
+
+**This used to be androidkit's demo and androidkit used to be the template.** It is neither now —
+the machinery in this repository is byte-identical to `skitter-app`'s rather than a copy of
+androidkit's with the names changed, which is what the whole port was for. What that removed here was
+about seven hundred lines of Gradle, CMake, manifest and sbt duplication and, more to the point, a
+hand-written JNI symbol (`Java_sh_sysl_androidbouncing_MainActivity_nativeSetSystemBars`) that had to
+be kept in step with a Scala class renamed into this application's package.
 
 ## Try it without building it
 
@@ -87,10 +98,13 @@ not preemptible — and did not cover the C a package carries. Fixed in the comp
 
 ## The Java half is Scala
 
-**There is no Java in this repository and no Kotlin either.** `MainActivity` is Scala 3, and the
-Scala standard library is a dependency of the application — so an activity here can use the language
-and not only its syntax. The demo proves it rather than claiming it: the insets are logged through a
-`List`, a `zip`, a `map` and an interpolated string, none of which links without the runtime.
+**There is no Java in this repository and no Kotlin either**, and as of the Skitter port there is no
+activity of this application's own either. `SkitterActivity` is Scala 3 and it is
+[`skitter-app`](https://github.com/sysl-lang/skitter-app)'s; this repository carries a copy because
+the template is cloned rather than depended on, but it is never renamed and never subclassed. The
+Scala standard library is a dependency of the application, so an activity can use the language and
+not only its syntax — proved rather than claimed, since the insets are logged through a `List`, a
+`zip`, a `map` and an interpolated string, none of which links without the runtime.
 
 **What it costs is a second build system, and that is the whole of the cost.** The Android Gradle
 plugin compiles Java and Kotlin itself and has no Scala support, so `activity/` is an sbt project and
@@ -100,10 +114,11 @@ is still the one command; `sbt` has to be installed.
 **Two things bite, and both are silent:**
 
 - **A `private` `@native` method does not work.** Scala renames a private method reached from an
-  inner class to `sh$sysl$bouncing$MainActivity$$nativeSetSystemBars` so the inner class can see
+  inner class to `sh$sysl$skitter$SkitterActivity$$nativeSetSystemBars` so the inner class can see
   it, and JNI then looks for a symbol with `_00024` in it that nothing defines. It compiles, links,
   and dies at the first call with an `UnsatisfiedLinkError`. The listener is an inner class, so this
-  is exactly that case — leave the method non-private.
+  is exactly that case — leave the method non-private. It is Skitter's file now and already right;
+  this is here because it is the kind of thing somebody re-derives while editing one.
 - **`minSdk` is 26 because of `scala-library`.** `d8` refuses to dex it below that — *"Increase the
   minSdkVersion to 26 or above"* — so an APK carrying the Scala runtime starts at Android 8.0. SDL's
   own floor is 21 and sysl's triple states 24; the three do not have to agree and the higher wins.

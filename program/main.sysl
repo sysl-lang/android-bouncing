@@ -18,7 +18,8 @@
 import sh.sysl.box2d.*
 import sh.sysl.box2d.math.{Vec2, Transform, AABB, zero, rot}
 import sh.sysl.sdl3.*
-import sh.sysl.sdl3.{INIT_VIDEO, SCANCODE_ESCAPE, WINDOW_RESIZABLE}
+import sh.sysl.sdl3.{INIT_VIDEO, SCANCODE_ESCAPE}
+import sh.sysl.skitter.{insets, orient, window_flags}
 import sysl.buf.{Buf, buf}
 import sysl.rand.rng
 import sysl.math.Float
@@ -92,34 +93,6 @@ palette(i: int) -> Color =
 // functions of a body `build-c` never emits, which renames them into an environment and drops the
 // attribute with the name. Card `0167`, fixed in the compiler; this file is what it buys back.
 //
-// **They are declared above the function that writes them, and the order is a courtesy rather than a
-// requirement.** This file is compiled by `sysl build-c`, which emits no `main`, so the file is not
-// a program's entry file and these are module storage: hoisted, laid into the object file, and in
-// scope throughout it whatever order they are written in. A plain `sysl build` would read the file
-// as a *body* instead and make them that body's locals, at which point the order does matter -- but
-// that is not how anything here is built, and nothing below relies on it.
-//
-// **They are written on the UI thread and read on SDL's**, and that is deliberate rather than
-// overlooked: four independent `i32` stores are the one shape where a lock buys nothing worth having.
-// The worst a reader can see is one frame laid out against a mix of old and new values, on the frame
-// the phone was turned.
-var bar_left: i32 = 0
-var bar_top: i32 = 0
-var bar_right: i32 = 0
-var bar_bottom: i32 = 0
-
-// **A JNI entry point, defined in sysl.** JNI resolves an `external fun` by mangling its package and
-// class into `Java_<package>_<Class>_<method>`, so this string is what `MainActivity`'s
-// `nativeSetSystemBars` binds to. A rename on either side still links — JNI resolves at run time —
-// and fails at the first call. (`self` is a reserved word, hence `instance`.)
-@export("Java_sh_sysl_androidbouncing_MainActivity_nativeSetSystemBars")
-set_system_bars(env: *u8, instance: *u8, l: i32, t: i32, r: i32, b: i32)
-    bar_left = l
-    bar_top = t
-    bar_right = r
-    bar_bottom = b
-end set_system_bars
-
 // ## Pixels and metres
 //
 // Box2D works in metres with y pointing up; SDL draws in pixels with y pointing down. One struct
@@ -146,15 +119,16 @@ struct View
     tall(self) -> f32 = (self.bottom - self.top) / self.scale
 end View
 
+// **The bars come from Skitter and are asked for every frame**, because both the drawable size and
+// the bars change when the phone is turned — a rectangle read at startup describes an orientation
+// the program may no longer be in. All zero on a desktop, which is the honest answer for a program
+// with a whole window.
 view_of(pw: i32, ph: i32) -> View
-    val bl = bar_left
-    val bt = bar_top
-    val br = bar_right
-    val bb = bar_bottom
-    val left = f32(bl)
-    val top = f32(bt)
-    val right = f32(pw - br)
-    val bottom = f32(ph - bb)
+    val ins = insets()
+    val left = f32(ins.left)
+    val top = f32(ins.top)
+    val right = f32(int(pw) - ins.right)
+    val bottom = f32(int(ph) - ins.bottom)
     val scale = (right - left) / VIEW_METRES
 
     View(left, top, right, bottom, scale, (left + right) * 0.5)
@@ -334,19 +308,20 @@ end draw_shape
 
 @export("SDL_main")
 sdl_main(argc: i32, argv: **u8) -> i32
-    // **Set before `init`, because a hint is read when the thing it configures is created** — and on
+    // **Before `init`, because a hint is read when the thing it configures is created** — and on
     // Android the activity's orientation is decided during startup.
     //
-    // **This hint alone is not enough.** `SDLActivity.setOrientationBis` only promotes "both
-    // allowed" to *follow the device* when the window is **resizable**; for a fixed window it still
-    // chooses from the requested width and height, so 800x600 comes up landscape with every
-    // orientation named. The two together are what make the activity `FULL_USER`.
-    set_hint("SDL_ORIENTATIONS", "Portrait PortraitUpsideDown LandscapeLeft LandscapeRight")
+    // **Skitter's, because the hint alone is not enough and the other half is easy to lose.**
+    // `SDLActivity.setOrientationBis` only promotes "all four allowed" into *follow the device* when
+    // the window is **resizable**; for a fixed window it still chooses from the requested width and
+    // height, so 800x600 comes up landscape with every orientation named. `window_flags()` below is
+    // that other half, and folding it in is what stops the two drifting apart.
+    orient()
 
     if !init(INIT_VIDEO)
         return 1
 
-    val window = create_window("bouncing", WANTED_W, WANTED_H, WINDOW_RESIZABLE).expect("a window")
+    val window = create_window("bouncing", WANTED_W, WANTED_H, window_flags()).expect("a window")
     val renderer = window.create_renderer().expect("a renderer")
 
     // Pace on the display's refresh. The step is measured either way, so a device that ignores this
