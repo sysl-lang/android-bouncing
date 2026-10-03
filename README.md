@@ -17,6 +17,22 @@ sysl-lang/box2d     rigid-body physics — Box2D v3, vendored
 ```
 
 **Two coordinates and neither of them is SDL3**, because imports are transitive: Skitter reaches it.
+Skitter is at 0.3.0, which sets the compiler floor at **sysl 0.0.161**.
+
+## Watching it run
+
+On a phone, standard output and standard error go nowhere, so `SDL_main` calls Skitter's
+`logcat("bouncing")` before anything else. From then on every `sysl.log` record becomes a logcat
+entry under that tag:
+
+```
+adb logcat -s bouncing
+```
+
+It logs `start` with the version, `box` each time the walls are built (the window in pixels, the box
+in metres, and how many bodies were thrown in), and `stop`. `CMakeLists.txt` links `log` (Android's
+`liblog`) for this, because Gradle's CMake owns the final link and never sees the module's
+`@link("log")`. On a desktop the call does nothing and the records go to standard error.
 
 **This used to be androidkit's demo and androidkit used to be the template.** It is neither now —
 the machinery in this repository is byte-identical to `skitter-app`'s rather than a copy of

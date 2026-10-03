@@ -19,8 +19,9 @@ import sh.sysl.box2d.*
 import sh.sysl.box2d.math.{Vec2, Transform, AABB, zero, rot}
 import sh.sysl.sdl3.*
 import sh.sysl.sdl3.{INIT_VIDEO, SCANCODE_ESCAPE}
-import sh.sysl.skitter.{insets, orient, window_flags}
+import sh.sysl.skitter.{insets, logcat, orient, window_flags}
 import sysl.buf.{Buf, buf}
+import sysl.log.info
 import sysl.rand.rng
 import sysl.math.Float
 
@@ -308,6 +309,12 @@ end draw_shape
 
 @export("SDL_main")
 sdl_main(argc: i32, argv: **u8) -> i32
+    // **First, because on a phone standard output and standard error go nowhere.** From here every
+    // `sysl.log` record is a logcat entry under `bouncing`, which `adb logcat -s bouncing` follows. On
+    // a desktop this does nothing and records go to standard error as usual.
+    logcat("bouncing")
+    info("start", [("version", __VERSION__)])
+
     // **Before `init`, because a hint is read when the thing it configures is created** — and on
     // Android the activity's orientation is decided during startup.
     //
@@ -369,6 +376,11 @@ sdl_main(argc: i32, argv: **u8) -> i32
                 toss(w, Vec2((f32(r.unit()) - 0.5) * now.half_width() * 1.6,
                              0.8 + f32(r.unit()) * (now.tall() - 1.6)), &seed)
                 count += 1
+
+            // Once per build: the first frame, and again whenever turning the phone or the bars
+            // arriving reshape the region — which is the event worth seeing in `adb logcat`.
+            info("box", [("window", s"${pw}x${ph}"), ("metres", s"${now.half_width() * 2.0}x${now.tall()}"),
+                         ("bodies", s"${count}")])
 
         loop
             poll_event() match
@@ -446,6 +458,7 @@ sdl_main(argc: i32, argv: **u8) -> i32
 
         renderer.present()
 
+    info("stop", [("bodies", s"${count}")])
     quit()
     0
 end sdl_main
