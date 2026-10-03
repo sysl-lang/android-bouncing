@@ -12,7 +12,7 @@
 
 package {
   name    = "android-bouncing"
-  version = "0.1.0"
+  version = "0.2.0"
 
   // Skitter 0.3.0's `logcat` is what sets this floor. Imports became transitive in 0.0.73, which is
   // what lets the block below name Skitter and reach SDL3 through it.
