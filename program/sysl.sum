@@ -5,6 +5,8 @@ github.com/sysl-lang/sdl3 v0.2.2 sha256:81c2153c7275c06615d5482ac264ea82760fa4d9
 github.com/sysl-lang/sdl3 v0.3.0 sha256:75737cb143e5f550bb5072748b2b39e6eaf1b07d5ed1bd13d03ae0c42575e7bd
 github.com/sysl-lang/sdl3 v0.3.1 sha256:15f3ff23eba6f6b24947db7e3a93b6a56066eb9c2266a96450e6eb0bb8814ffe
 github.com/sysl-lang/sdl3 v0.3.3 sha256:5e8a5574a2303c772efb1efd2b8c49beaa61945c5eee25ff1116a99261c9865c
+github.com/sysl-lang/sdl3 v0.3.5 sha256:cb2d2a1cc59b71cdb5ea837db239b94e4161e0393d5742c664682fabef3c0e9e
 github.com/sysl-lang/skitter v0.1.0 sha256:7a1f866d1d2c82cd99713928efdc149ea3eb7c17e4c7a83db4ff7ede4d58cd60
 github.com/sysl-lang/skitter v0.3.0 sha256:bc9836fa1300a8da26cef1bc11a40e5863ab6978bcc9ed7518966376b7491214
+github.com/sysl-lang/skitter v0.3.1 sha256:4d0a2b1e7b42447e00dcab809ee15b333bbf79990099ac067bfb8620622d4e98
 github.com/sysl-lang/toml v0.1.1 sha256:95af29833ca12dabd423b1cdf6d0a4a56d79b998c390c992eb2d9971d1ab2007
