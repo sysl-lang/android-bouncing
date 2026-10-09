@@ -1,12 +1,5 @@
-github.com/sysl-lang/box2d v0.1.0 sha256:756b4b7ae3be40b9c3bf318dc942ad10f04588abe3071389a6b1a6d8c8eba6f3
 github.com/sysl-lang/box2d v0.1.1 sha256:9137b19744496824d8609f3a11b8a84211d03faed6fbdf662733eca0fad8adbd
-github.com/sysl-lang/parsing v0.5.0 sha256:fc738003a37816c28231828cc1f32bdb9bddadbb62d473f1a8a93ebf8a8b174d
-github.com/sysl-lang/sdl3 v0.2.2 sha256:81c2153c7275c06615d5482ac264ea82760fa4d981c2b543341687c08de7932a
-github.com/sysl-lang/sdl3 v0.3.0 sha256:75737cb143e5f550bb5072748b2b39e6eaf1b07d5ed1bd13d03ae0c42575e7bd
-github.com/sysl-lang/sdl3 v0.3.1 sha256:15f3ff23eba6f6b24947db7e3a93b6a56066eb9c2266a96450e6eb0bb8814ffe
-github.com/sysl-lang/sdl3 v0.3.3 sha256:5e8a5574a2303c772efb1efd2b8c49beaa61945c5eee25ff1116a99261c9865c
-github.com/sysl-lang/sdl3 v0.3.5 sha256:cb2d2a1cc59b71cdb5ea837db239b94e4161e0393d5742c664682fabef3c0e9e
-github.com/sysl-lang/skitter v0.1.0 sha256:7a1f866d1d2c82cd99713928efdc149ea3eb7c17e4c7a83db4ff7ede4d58cd60
-github.com/sysl-lang/skitter v0.3.0 sha256:bc9836fa1300a8da26cef1bc11a40e5863ab6978bcc9ed7518966376b7491214
-github.com/sysl-lang/skitter v0.3.1 sha256:4d0a2b1e7b42447e00dcab809ee15b333bbf79990099ac067bfb8620622d4e98
-github.com/sysl-lang/toml v0.1.1 sha256:95af29833ca12dabd423b1cdf6d0a4a56d79b998c390c992eb2d9971d1ab2007
+github.com/sysl-lang/parsing v0.13.0 sha256:d392b5d4449238ba518b59699b211298d7b33dc8f4abe78de8bfda57ac61e065
+github.com/sysl-lang/sdl3 v0.3.6 sha256:b0e094232e35075c641427e1e46b5f6924b16322b6fa52e0cbf9b47e77a357f2
+github.com/sysl-lang/skitter v0.3.2 sha256:5802f445329160c964305b0702a36389f1df537f5fa5739e06d37b3d4487b1dc
+github.com/sysl-lang/toml v0.1.2 sha256:2ee4aec9be1c82941c0abe71cd4bdd61d42e26d5ad95a2049452a44f73e9fc9a
