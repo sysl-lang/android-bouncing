@@ -33,7 +33,7 @@ package {
 // bars, the orientation pair and the activity itself. It brings SDL3 with it, because imports are
 // transitive as of sysl 0.0.73 — so this program names it rather than SDL3 directly.
 dependencies {
-  skitter { git = "github.com/sysl-lang/skitter", version = "0.3.2" }
+  skitter { git = "github.com/sysl-lang/skitter", version = "0.3.3" }
   box2d   { git = "github.com/sysl-lang/box2d",   version = "0.1.1" }
 }
 
