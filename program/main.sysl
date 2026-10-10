@@ -268,8 +268,8 @@ end rescale
 // polygon — and Box2D's are convex by construction, since `make_polygon` runs its points through a
 // hull. `draw_geometry` is the one call that puts arbitrary triangles on an SDL renderer.
 draw_polygon(ren: &Renderer, v: View, xf: Transform, p: Polygon, col: Color)
-    var verts: Buf[Vertex] = buf()
-    var idx: Buf[i32] = buf()
+    val verts: Buf[Vertex] = buf()
+    val idx: Buf[i32] = buf()
     val count = usize(p.count)
 
     for i in 0..<count
