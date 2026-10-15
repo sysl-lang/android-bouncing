@@ -4,6 +4,8 @@
 with no gravity, perfect restitution and a little friction, so nothing ever settles and everything
 tumbles. Tap to throw in another.
 
+*An independent sysl package for Android. It is not affiliated with or endorsed by Google.*
+
 **To start an Android project, clone
 [`sysl-lang/skitter-app`](https://github.com/sysl-lang/skitter-app)** — two lines in
 `gradle.properties` and a `program/main.sysl`. This repository is a demo, and everything about *how*
