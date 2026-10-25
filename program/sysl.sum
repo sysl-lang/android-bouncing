@@ -1,4 +1,4 @@
-github.com/sysl-lang/box2d v0.1.1 sha256:9137b19744496824d8609f3a11b8a84211d03faed6fbdf662733eca0fad8adbd
+github.com/sysl-lang/box2d v0.1.5 sha256:0a887295678938c96a380f93ac96be19e13b2c9c3a263bd32a41e93533e89416
 github.com/sysl-lang/parsing v0.13.2 sha256:05d41aa60754f7324c73b32a5cc1a546e71cea8120d15080385e8883e04cbce8
 github.com/sysl-lang/sdl3 v0.3.11 sha256:ddfec9152616d354a488ad9c34fddcc9058b14e1fdbf40f4a5fab1a7214bb170
 github.com/sysl-lang/skitter v0.3.4 sha256:96ef1b599e561f42f61867740a0048349b05706bee0d53a2ecc3a2de5cc9f192
