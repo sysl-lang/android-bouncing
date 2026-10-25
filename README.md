@@ -19,7 +19,7 @@ sysl-lang/box2d     rigid-body physics — Box2D v3, vendored
 ```
 
 **Two coordinates and neither of them is SDL3**, because imports are transitive: Skitter reaches it.
-Skitter is at 0.3.0, which sets the compiler floor at **sysl 0.0.161**.
+The manifest is `program/sysl.hocon`, and the compiler floor is **sysl 0.6.0**.
 
 ## Watching it run
 
