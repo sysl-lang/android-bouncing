@@ -34,7 +34,7 @@ package {
 // transitive as of sysl 0.0.73 — so this program names it rather than SDL3 directly.
 dependencies {
   skitter { git = "github.com/sysl-lang/skitter", version = "0.3.4" }
-  box2d   { git = "github.com/sysl-lang/box2d",   version = "0.1.5" }
+  box2d   { git = "github.com/sysl-lang/box2d",   version = "0.1.6" }
 }
 
 // `heap` and `posix` are what `sh.sysl.sdl3` itself requires, and a program reaching a gated module
